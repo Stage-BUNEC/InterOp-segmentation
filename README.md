@@ -1,4 +1,4 @@
-# InterOp-segmentation
+# InterOperability
 
 ### This script is used to :
 <ul>
