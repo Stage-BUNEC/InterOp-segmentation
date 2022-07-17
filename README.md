@@ -8,6 +8,6 @@
     <li>Share datas in a Sync Folder</li>
 </ul>
 
-# Verify <h6>output</h6>
+## Verify <h6>output</h6>
 
 <img src="verify.png" alt='verify_output'>
