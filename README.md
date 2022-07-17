@@ -10,4 +10,4 @@
 
 ## Verify <h6>output</h6>
 
-<img src="verify.png" alt='verify_output'>
+<img src="verify.png" alt='verify_output' width="350px" heigh="400px">
