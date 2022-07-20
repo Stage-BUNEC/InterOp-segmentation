@@ -66,7 +66,6 @@ echo "900#dsdadasdassdasda#test" >>$liste_fosa_tmp
 UpdateNbr=0
 printf "\n---\n"
 printf "\n===| FOSA list checking... \n"
-
 checkFosa "$datasFolder"2022-04-28 $UpdateNbr
-printf "\n===| End FOSA check checking...  \n"
+printf "\n===| End FOSA check  \n"
 printf "\n----------------[ End Check ]-----------------\n\n"
