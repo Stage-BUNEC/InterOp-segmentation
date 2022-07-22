@@ -16,3 +16,11 @@
 ## Segmentation <h6>output</h6>
 
 <img src="split.png" alt='split_output' width="350px" heigh="400px">
+
+## How to use ?
+
+Just run this bash file
+
+```
+./verify.sh 
+```
