@@ -41,19 +41,27 @@ function checkFosa() {
     # au fichier de la liste des FOSA deja repertorie
     # arg: Elle prend en entre le dossier journalier du FOSA. e.g: 2022-04-28
 
+    updateNbr=0
     cut -d"#" -f1,14,15,16,17,18 "$1"/csv/formulaire_de_declaration_de_naissances_fosa_* | grep -a -E "^[0-9]" | sort -k 1 -n | uniq >>$liste_fosa_tmp
-    cat $liste_fosa_tmp | (
-        while read -r ligne; do
-            orgUnit=$(echo "$ligne" | awk -F '#' '{print $2}')
-            nbr=$(grep -c "$orgUnit" $list_fosa_origin)
-            if [ "$nbr" -lt 1 ]; then
-                # on MAJ la liste des FOSA
-                echo "$ligne" >>$list_fosa_origin
-                echo "[ Update ] $ligne" >>$log_update_fosa
-            fi
-        done
-    )
+
+    # On lit chaq ligne du fichier
+    while read -r ligne; do
+        orgUnit=$(echo "$ligne" | awk -F '#' '{print $2}')
+        nbr=$(grep -c "$orgUnit" $list_fosa_origin)
+        if [ "$nbr" -lt 1 ]; then
+            # on MAJ la liste des FOSA
+            echo "$ligne" >>$list_fosa_origin
+            echo -e "\n[ Update ] $ligne" >>$log_update_fosa
+            declare -I updateNbr=updateNbr+1
+        fi
+    done < <(cat $liste_fosa_tmp)
+
     echo "" >$liste_fosa_tmp
+    if [ $updateNbr -eq 0 ]; then
+        echo -e "\n[ ALL is UPTODATE ]"
+    fi
+
+    return $updateNbr
 }
 
 function splitFosaToCEC() {
@@ -78,28 +86,31 @@ function splitFosaToCEC() {
         done <"$fichier"
     done
 }
+
 ###################### Debut Verification ##########################
 
 printf "\n--------------[ Start Checking ]-----------------\n"
 
 NbrError=0
 printf "\n===| Record's Number checking... \n\n"
-# for folder in "$datasFolder"*; do
-#     checkRecords "$folder"
-# done
+for folder in "$datasFolder"*; do
+    checkRecords "$folder"
+done
 printf "\n===| End Record's Number Check. %s error's folder(s) \n" "$NbrError"
 
 # echo "800#dsdasdasda#test" >>$liste_fosa_tmp
 # echo "900#dsdadasdassdasda#test" >>$liste_fosa_tmp
-UpdateNbr=0
-printf "\n---\n"
-printf "\n===| FOSA list checking... \n"
-# checkFosa "$datasFolder"2022-04-28 $UpdateNbr
-printf "\n===| End FOSA check  \n"
 
 printf "\n---\n"
-printf "\n===| FOSA segmentation... \n"
+printf "\n===| FOSA List checking... \n"
+checkFosa "$datasFolder"2022-04-28
+nbr=$?
+printf "\n===| End FOSA List check %s Update(s)\n" "$nbr"
+
+###################### Debut Segmentation ##########################
+
+printf "\n--------------[ Start Segmentation ]-----------------\n"
+printf "\n===| Split FOSA in each CEC... please wait... \n"
 splitFosaToCEC "$datasFolder"2022-04-28
-printf "\n===| End FOSA segmentation  \n"
 
-printf "\n----------------[ End Check ]-----------------\n\n"
+printf "\n----------------[ End Segmentation ]-----------------\n\n"
