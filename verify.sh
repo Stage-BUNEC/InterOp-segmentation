@@ -51,14 +51,16 @@ function checkFosa() {
         if [ "$nbr" -lt 1 ]; then
             # on MAJ la liste des FOSA
             echo "$ligne" >>$list_fosa_origin
-            echo -e "\n[ Update ] $ligne" >>$log_update_fosa
-            declare -I updateNbr=updateNbr+1
+            echo -e "[ Update ] $ligne" >>$log_update_fosa
+            declare -i updateNbr=updateNbr+1
         fi
     done < <(cat $liste_fosa_tmp)
 
     echo "" >$liste_fosa_tmp
     if [ $updateNbr -eq 0 ]; then
         echo -e "\n[ ALL is UPTODATE ]"
+    else
+        echo -e "\n[ UPDATE DONE ! ]"
     fi
 
     return $updateNbr
@@ -89,7 +91,7 @@ function splitFosaToCEC() {
 
 ###################### Debut Verification ##########################
 
-printf "\n--------------[ Start Checking ]-----------------\n"
+printf "\n--------------[ Start Checking ]------------------\n\n"
 
 NbrError=0
 printf "\n===| Record's Number checking... \n\n"
@@ -98,19 +100,24 @@ for folder in "$datasFolder"*; do
 done
 printf "\n===| End Record's Number Check. %s error's folder(s) \n" "$NbrError"
 
-# echo "800#dsdasdasda#test" >>$liste_fosa_tmp
-# echo "900#dsdadasdassdasda#test" >>$liste_fosa_tmp
+echo "800#dsdasdasda#test" >>$liste_fosa_tmp
+echo "900#dsdadasdassdasda#test" >>$liste_fosa_tmp
 
 printf "\n---\n"
+sleep 1
 printf "\n===| FOSA List checking... \n"
 checkFosa "$datasFolder"2022-04-28
 nbr=$?
 printf "\n===| End FOSA List check %s Update(s)\n" "$nbr"
+sleep 1
+printf "\n\n----------------[ End Check ]----------------------\n\n"
 
 ###################### Debut Segmentation ##########################
-
-printf "\n--------------[ Start Segmentation ]-----------------\n"
+echo "<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+printf "\n------------[ Start Segmentation ]-----------------\n\n"
+sleep 1
 printf "\n===| Split FOSA in each CEC... please wait... \n"
 splitFosaToCEC "$datasFolder"2022-04-28
 
-printf "\n----------------[ End Segmentation ]-----------------\n\n"
+printf "\n\n-------------[ End Segmentation ]------------------\n\n"
+sleep 1
