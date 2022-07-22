@@ -1,6 +1,7 @@
 # InterOperability
 
-### This script is used to :
+### This script is used to
+
 <ul>
     <li>Verify that all datas are received</li>
     <li>split each declare in it corresponding CEC.</li>
@@ -11,3 +12,7 @@
 ## Verify <h6>output</h6>
 
 <img src="verify.png" alt='verify_output' width="350px" heigh="400px">
+
+## Segmentation <h6>output</h6>
+
+<img src="split.png" alt='split_output' width="350px" heigh="400px">
