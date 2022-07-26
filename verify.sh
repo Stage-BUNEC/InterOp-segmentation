@@ -72,6 +72,13 @@ function splitFosaToCEC() {
 
     for fichier in "$1"/csv/*fosa*; do
 
+        # Variable utile au % de progression
+        nbrligne=$(wc -l <"${fichier}")
+        step=$((nbrligne / 100))
+        lignenbr=0
+        percent=0
+        filename=$(echo "$fichier" | cut -d'/' -f7)
+
         # On lit le contenu du fichier ligne par ligne
         while IFS= read -r ligne; do
 
@@ -84,8 +91,16 @@ function splitFosaToCEC() {
             else
                 echo "$ligne" >>"$cec_match""$id""_""cec.csv"
             fi
+            lignenbr=$((lignenbr + 1))
+            if [ $lignenbr -eq $step ]; then
+                percent=$((percent + 1))
+                lignenbr=0
+            fi
 
+            # Affiche la progression de segmentation en %
+            echo -ne "\rsegmenting of '$filename' ... ($percent %)"
         done <"$fichier"
+        echo ""
     done
 }
 
@@ -116,8 +131,8 @@ printf "\n\n----------------[ End Check ]----------------------\n\n"
 echo "<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 printf "\n------------[ Start Segmentation ]-----------------\n\n"
 sleep 1
-printf "\n===| Split FOSA in each CEC... please wait... \n"
+printf "\n===| Split FOSA in each CEC... please wait... \n\n"
 splitFosaToCEC "$datasFolder"2022-04-28
 
-printf "\n\n-------------[ End Segmentation ]------------------\n\n"
+printf "\n-------------[ End Segmentation ]------------------\n\n"
 sleep 1
