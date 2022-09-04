@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# [ Date ]        : 26-07-2022
+# [ Description ] : Ce script sert à segmenter les donnees dans les differents CEC
+# [Author(s) ]    : NANFACK STEVE / ERIC OKALA 
+
 # Liste Dossiers/Repertoires
 datasFolder=../BUNEC_datas/var/crvs_dhis2/
 cec_match=output/cec_match/
